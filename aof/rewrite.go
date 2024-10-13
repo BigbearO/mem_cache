@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/engine/payload"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/conf"
 	"github.com/BigbearO/mem_cache/tool/logger"
@@ -19,7 +19,7 @@ type snapshotAOF struct {
 	tempFile *os.File
 }
 
-func (aof *AOF) Rewrite(engine _interface.Engine) {
+func (aof *AOF) Rewrite(engine common.Engine) {
 	//1.对现有的aof文件做一次快照
 	snapShot, err := aof.startRewrite()
 	if err != nil {
@@ -75,7 +75,7 @@ func (aof *AOF) startRewrite() (*snapshotAOF, error) {
 	return snapShot, nil
 }
 
-func (aof *AOF) doRewrite(snapShot *snapshotAOF, engine _interface.Engine) error {
+func (aof *AOF) doRewrite(snapShot *snapshotAOF, engine common.Engine) error {
 	// 临时aof对象
 	tmpAof := &AOF{}
 	tmpAof.aofFileName = aof.aofFileName

@@ -3,7 +3,7 @@ package engine
 import (
 	"strconv"
 
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/conf"
 )
@@ -11,7 +11,7 @@ import (
 /*
 基础命令
 */
-func execSelect(c _interface.Connection, redisArgs [][]byte) protocol.Reply {
+func execSelect(c common.Connection, redisArgs [][]byte) protocol.Reply {
 	if len(redisArgs) != 1 {
 		return protocol.NewArgNumErrReply("select")
 	}

@@ -8,8 +8,8 @@ import (
 	"sync"
 
 	"github.com/BigbearO/mem_cache/cluster"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/engine"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/redis/connection"
 	"github.com/BigbearO/mem_cache/redis/parser"
 	"github.com/BigbearO/mem_cache/redis/protocol"
@@ -27,12 +27,12 @@ type RedisHandler struct {
 
 	//engine *engine.Engine
 
-	engine _interface.Engine
+	engine common.Engine
 }
 
 func NewRedisHandler() *RedisHandler {
 
-	var abEngine _interface.Engine
+	var abEngine common.Engine
 	if len(conf.GlobalConfig.Peers) > 0 {
 		// 分布式
 		logger.Debug("启动集群版")

@@ -3,9 +3,9 @@ package pubhub
 import (
 	"strconv"
 
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/datastruct/dict"
 	"github.com/BigbearO/mem_cache/datastruct/list"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/locker"
 	"github.com/BigbearO/mem_cache/tool/logger"
@@ -68,7 +68,7 @@ func NewPubsub() *Pubhub {
 }
 
 // SUBSCRIBE channel [channel ...]
-func (p *Pubhub) Subscribe(c _interface.Connection, args [][]byte) protocol.Reply {
+func (p *Pubhub) Subscribe(c common.Connection, args [][]byte) protocol.Reply {
 
 	if len(args) < 1 {
 		return protocol.NewArgNumErrReply("subscribe")
@@ -119,7 +119,7 @@ func (p *Pubhub) Subscribe(c _interface.Connection, args [][]byte) protocol.Repl
 
 // 取消订阅
 // unsubscribes itself from all the channels using the UNSUBSCRIBE command without additional arguments
-func (p *Pubhub) Unsubscribe(c _interface.Connection, args [][]byte) protocol.Reply {
+func (p *Pubhub) Unsubscribe(c common.Connection, args [][]byte) protocol.Reply {
 
 	var channels []string
 	if len(args) < 1 { // 取消全部
@@ -162,7 +162,7 @@ func (p *Pubhub) Unsubscribe(c _interface.Connection, args [][]byte) protocol.Re
 	return protocol.NewNoReply()
 }
 
-func (p *Pubhub) Publish(self _interface.Connection, args [][]byte) protocol.Reply {
+func (p *Pubhub) Publish(self common.Connection, args [][]byte) protocol.Reply {
 
 	if len(args) != 2 {
 		return protocol.NewArgNumErrReply("publish")
@@ -183,7 +183,7 @@ func (p *Pubhub) Publish(self _interface.Connection, args [][]byte) protocol.Rep
 		// 遍历链表
 		l.ForEach(func(i int, val interface{}) bool {
 
-			conn, _ := val.(_interface.Connection)
+			conn, _ := val.(common.Connection)
 
 			if conn.IsClosed() {
 				failedClient[val] = struct{}{}

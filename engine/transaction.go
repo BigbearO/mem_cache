@@ -4,14 +4,14 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 )
 
 // 事务文档： https://redis.io/docs/interact/transactions/
 
 // 开启事务
-func StartMulti(c _interface.Connection) protocol.Reply {
+func StartMulti(c common.Connection) protocol.Reply {
 	if c.IsTransaction() {
 		return protocol.NewGenericErrReply("multi is already start,do not repeat it")
 	}
@@ -21,7 +21,7 @@ func StartMulti(c _interface.Connection) protocol.Reply {
 }
 
 // 取消事务
-func DiscardMulti(c _interface.Connection) protocol.Reply {
+func DiscardMulti(c common.Connection) protocol.Reply {
 	if !c.IsTransaction() {
 		return protocol.NewGenericErrReply("DISCARD without MULTI")
 	}
@@ -31,7 +31,7 @@ func DiscardMulti(c _interface.Connection) protocol.Reply {
 }
 
 // 入队：保证命令在格式正确&& 存在的情况下入队
-func EnqueueCmd(c _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func EnqueueCmd(c common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	cmdName := strings.ToLower(string(redisCommand[0]))
 
@@ -59,7 +59,7 @@ func EnqueueCmd(c _interface.Connection, redisCommand [][]byte) protocol.Reply {
 }
 
 // 监视 key [key...]
-func Watch(db *DB, conn _interface.Connection, args [][]byte) protocol.Reply {
+func Watch(db *DB, conn common.Connection, args [][]byte) protocol.Reply {
 	if len(args) < 1 {
 		return protocol.NewArgNumErrReply("WATCH")
 	}
@@ -75,13 +75,13 @@ func Watch(db *DB, conn _interface.Connection, args [][]byte) protocol.Reply {
 }
 
 // 清空watch key
-func UnWatch(db *DB, conn _interface.Connection) protocol.Reply {
+func UnWatch(db *DB, conn common.Connection) protocol.Reply {
 	conn.CleanWatchKey()
 	return protocol.NewOkReply()
 }
 
 // 执行事务  exec rb
-func ExecMulti(db *DB, conn _interface.Connection, args [][]byte) protocol.Reply {
+func ExecMulti(db *DB, conn common.Connection, args [][]byte) protocol.Reply {
 
 	// 说明当前不是【事务模式】
 	if !conn.IsTransaction() {
@@ -120,7 +120,7 @@ func (db *DB) GetUndoLog(cmdLine [][]byte) []CmdLine {
 }
 
 // 执行事务：本质就是一堆命令一起执行， isRollback 表示出错是否回滚
-func (db *DB) execMulti(conn _interface.Connection, cmdLines []CmdLine, isRollback bool) protocol.Reply {
+func (db *DB) execMulti(conn common.Connection, cmdLines []CmdLine, isRollback bool) protocol.Reply {
 
 	// 命令的执行结果
 	results := make([]protocol.Reply, len(cmdLines))

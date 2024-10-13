@@ -1,12 +1,12 @@
 package cluster
 
 import (
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 )
 
 // mset key value [key value...]
-func mset(cluster *Cluster, c _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func mset(cluster *Cluster, c common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	// 基础校验
 	if len(redisCommand) < 3 {

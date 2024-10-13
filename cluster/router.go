@@ -3,11 +3,11 @@ package cluster
 import (
 	"strings"
 
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 )
 
-type clusterFunc func(cluster *Cluster, conn _interface.Connection, args [][]byte) protocol.Reply
+type clusterFunc func(cluster *Cluster, conn common.Connection, args [][]byte) protocol.Reply
 
 var clusterRouter = make(map[string]clusterFunc)
 
@@ -30,7 +30,7 @@ func init() {
 	registerClusterRouter("Direct", directFunc)
 }
 
-func defultFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func defultFunc(cluster *Cluster, conn common.Connection, redisCommand [][]byte) protocol.Reply {
 	key := string(redisCommand[1])
 	// 计算key所属的节点
 	peer := cluster.consistHash.Get(key)
@@ -38,6 +38,6 @@ func defultFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]b
 }
 
 // 直接在存储引擎上执行命令
-func directFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func directFunc(cluster *Cluster, conn common.Connection, redisCommand [][]byte) protocol.Reply {
 	return cluster.engine.Exec(conn, popCmd(redisCommand))
 }

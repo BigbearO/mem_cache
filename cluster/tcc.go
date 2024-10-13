@@ -1,12 +1,12 @@
 package cluster
 
 import (
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 )
 
 // 回滚事务
-func rollbackTransaction(cluster *Cluster, c _interface.Connection, txId string, ipMap map[string][]string) {
+func rollbackTransaction(cluster *Cluster, c common.Connection, txId string, ipMap map[string][]string) {
 	argsGroup := [][]byte{[]byte(txId)}
 	// 向所有的ip发送回滚请求
 	for ip := range ipMap {
@@ -15,7 +15,7 @@ func rollbackTransaction(cluster *Cluster, c _interface.Connection, txId string,
 }
 
 // 提交事务
-func commitTransaction(cluster *Cluster, c _interface.Connection, txId string, ipMap map[string][]string) ([]protocol.Reply, protocol.Reply) {
+func commitTransaction(cluster *Cluster, c common.Connection, txId string, ipMap map[string][]string) ([]protocol.Reply, protocol.Reply) {
 
 	result := make([]protocol.Reply, len(ipMap))
 	var errReply protocol.Reply = nil
@@ -44,7 +44,7 @@ func genTxKey(txId string) string {
 
 // ***********************Prepare/Commit/Rollback命令处理函数***********************
 // prepare txid mset key value [key value...]
-func prepareFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func prepareFunc(cluster *Cluster, conn common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	if len(redisCommand) < 3 {
 		return protocol.NewArgNumErrReply("prepare")
@@ -81,7 +81,7 @@ func prepareFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]
 }
 
 // rollback txid
-func rollbackFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func rollbackFunc(cluster *Cluster, conn common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	if len(redisCommand) != 2 {
 		return protocol.NewArgNumErrReply("rollback")
@@ -113,7 +113,7 @@ func rollbackFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][
 }
 
 // commit txid
-func commitFunc(cluster *Cluster, conn _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func commitFunc(cluster *Cluster, conn common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	if len(redisCommand) != 2 {
 		return protocol.NewArgNumErrReply("commit")

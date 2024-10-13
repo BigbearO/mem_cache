@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/BigbearO/mem_cache/aof"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/engine/payload"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/pubhub"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/conf"
@@ -85,7 +85,7 @@ func (e *Engine) selectDB(index int) (*DB, *protocol.GenericErrReply) {
 }
 
 // redisCommand 待执行的命令  protocol.Reply 执行结果
-func (e *Engine) Exec(c _interface.Connection, redisCommand [][]byte) (result protocol.Reply) {
+func (e *Engine) Exec(c common.Connection, redisCommand [][]byte) (result protocol.Reply) {
 
 	defer func() {
 		if err := recover(); err != nil {

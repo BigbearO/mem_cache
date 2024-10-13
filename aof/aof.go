@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/connection"
 	"github.com/BigbearO/mem_cache/redis/parser"
 	"github.com/BigbearO/mem_cache/redis/protocol"
@@ -61,11 +61,11 @@ type AOF struct {
 	// 禁止aofChan的写入
 	atomicClose atomic.Bool
 	// 引擎 *Engine
-	engine _interface.Engine
+	engine common.Engine
 }
 
 // 构建AOF对象
-func NewAOF(aofFileName string, engine _interface.Engine, load bool, fsync string) (*AOF, error) {
+func NewAOF(aofFileName string, engine common.Engine, load bool, fsync string) (*AOF, error) {
 	aof := &AOF{}
 	aof.aofFileName = aofFileName
 	aof.aofFsync = strings.ToLower(fsync)

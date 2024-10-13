@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/engine"
 	"github.com/BigbearO/mem_cache/engine/payload"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/conf"
 	"github.com/BigbearO/mem_cache/tool/consistenthash"
@@ -79,7 +79,7 @@ func NewCluster() *Cluster {
 	return &cluster
 }
 
-func (cluster *Cluster) Exec(c _interface.Connection, redisCommand [][]byte) (result protocol.Reply) {
+func (cluster *Cluster) Exec(c common.Connection, redisCommand [][]byte) (result protocol.Reply) {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Warn(fmt.Sprintf("error occurs: %v\n%s", err, string(debug.Stack())))

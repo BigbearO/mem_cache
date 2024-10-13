@@ -1,12 +1,12 @@
 package cluster
 
 import (
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/logger"
 )
 
-func (cluster *Cluster) Relay(peer string, conn _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func (cluster *Cluster) Relay(peer string, conn common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	// ******本地执行******
 	if cluster.self == peer {

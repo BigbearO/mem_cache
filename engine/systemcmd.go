@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"github.com/BigbearO/mem_cache/interface"
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/conf"
 )
@@ -20,7 +20,7 @@ func Ping(redisArgs [][]byte) protocol.Reply {
 	return protocol.NewArgNumErrReply("ping")
 }
 
-func checkPasswd(c _interface.Connection) bool {
+func checkPasswd(c common.Connection) bool {
 	// 如果没有配置密码
 	if conf.GlobalConfig.RequirePass == "" {
 		return true
@@ -29,7 +29,7 @@ func checkPasswd(c _interface.Connection) bool {
 	return c.GetPassword() == conf.GlobalConfig.RequirePass
 }
 
-func Auth(c _interface.Connection, redisArgs [][]byte) protocol.Reply {
+func Auth(c common.Connection, redisArgs [][]byte) protocol.Reply {
 	if len(redisArgs) != 1 {
 		return protocol.NewArgNumErrReply("auth")
 	}

@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/engine"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 )
 
@@ -28,11 +28,11 @@ const (
 )
 
 type Transaction struct {
-	txId         string                // transaction id
-	redisCommand [][]byte              // redis命令
-	cluster      *Cluster              // 集群对象
-	conn         _interface.Connection // socket连接
-	dbIndex      int                   // 数据库索引
+	txId         string            // transaction id
+	redisCommand [][]byte          // redis命令
+	cluster      *Cluster          // 集群对象
+	conn         common.Connection // socket连接
+	dbIndex      int               // 数据库索引
 
 	writeKeys  []string  // 写key
 	readKeys   []string  // 读key
@@ -43,7 +43,7 @@ type Transaction struct {
 	mu     *sync.Mutex       // 事务锁（操作事务对象的时候上锁）
 }
 
-func NewTransaction(txId string, cmdLine [][]byte, cluster *Cluster, c _interface.Connection) *Transaction {
+func NewTransaction(txId string, cmdLine [][]byte, cluster *Cluster, c common.Connection) *Transaction {
 	return &Transaction{
 		txId:         txId,
 		redisCommand: cmdLine,

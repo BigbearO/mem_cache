@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/BigbearO/mem_cache/common"
 	"github.com/BigbearO/mem_cache/datastruct/dict"
 	"github.com/BigbearO/mem_cache/engine/payload"
-	"github.com/BigbearO/mem_cache/interface"
 	"github.com/BigbearO/mem_cache/redis/protocol"
 	"github.com/BigbearO/mem_cache/tool/logger"
 	"github.com/BigbearO/mem_cache/tool/timewheel"
@@ -62,7 +62,7 @@ func (db *DB) SetIndex(index int) {
 	db.index = index
 }
 
-func (db *DB) Exec(c _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func (db *DB) Exec(c common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	cmdName := strings.ToLower(string(redisCommand[0]))
 
@@ -105,7 +105,7 @@ func validateArity(arity int, cmdArgs [][]byte) bool {
 	return argNum >= -arity
 }
 
-func (db *DB) execNormalCommand(c _interface.Connection, redisCommand [][]byte) protocol.Reply {
+func (db *DB) execNormalCommand(c common.Connection, redisCommand [][]byte) protocol.Reply {
 
 	cmdName := strings.ToLower(string(redisCommand[0]))
 
