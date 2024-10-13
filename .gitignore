@@ -2,3 +2,4 @@ logs
 *.aof
 tmp
 data
+.idea
